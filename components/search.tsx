@@ -56,7 +56,7 @@ export function Search() {
     params.set("package", values.package);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
     const data = await getStats(values);
-    dispatch({ type: "replace-all", payload: data });
+    dispatch({ type: "replace-all", payload: { ...data, status: "loaded" } });
   }
 
   return (
