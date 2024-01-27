@@ -1,8 +1,14 @@
 import Graph from "@/components/graph";
 import Nav from "@/components/nav";
 import { Search } from "@/components/search";
+import getStats, { TIMEFRAMES } from "@/lib/fetchStats";
 
-export default function Home() {
+export default async function Home() {
+  const data = await getStats({
+    package: "react",
+    timeframe: TIMEFRAMES["last month"],
+  });
+
   return (
     <div className="px-3 md:px-4 md:container space-y-5 sm:space-y-10">
       <Nav />
@@ -11,7 +17,10 @@ export default function Home() {
           Get count of npm <br /> packages quickly
         </h1>
         <Search />
-        <Graph />
+        <p className="text-center">
+          Total downloads: {data.total.toLocaleString()}
+        </p>
+        <Graph data={data} />
       </main>
     </div>
   );
