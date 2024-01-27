@@ -21,17 +21,17 @@ export const TIMEFRAMES: { [key: string]: string } = {
 
 type getStatsType = {
   package: string;
-  timeframe: string;
+  range: string;
 };
 export default async function getStats(params: getStatsType) {
   if (!params.package) {
     throw new Error("No pkg name specified");
   }
-  if (!params.timeframe) {
-    throw new Error("No timeframe specified");
+  if (!params.range) {
+    throw new Error("No range specified");
   }
   const range =
-    TIMEFRAMES[params.timeframe as keyof typeof TIMEFRAMES] || params.timeframe;
+    TIMEFRAMES[params.range as keyof typeof TIMEFRAMES] || params.range;
   try {
     let newData = await fetch(
       `https://api.npmjs.org/downloads/range/${range}/${params.package}`
@@ -39,12 +39,16 @@ export default async function getStats(params: getStatsType) {
       .then((res) => res.json())
       .then((json) => {
         return {
-          data: json.downloads,
+          data: json.downloads.filter(
+            (it: { downloads: number }) => it.downloads > 0
+          ),
           total: json.downloads.reduce(
             (acc: number, curr: { downloads: number; day: string }) =>
               acc + curr.downloads,
             0
           ),
+          range,
+          package: params.package,
         };
       });
     return newData;
@@ -52,6 +56,8 @@ export default async function getStats(params: getStatsType) {
     return {
       data: [],
       total: 0,
+      range: range,
+      package: params.package,
     };
   }
 }

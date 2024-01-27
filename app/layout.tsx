@@ -5,6 +5,7 @@ import { Poppins } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
+import Providers from "./Providers";
 
 const poppins = Poppins({
   display: "swap",
@@ -32,7 +33,7 @@ export default function RootLayout({
           poppins.className
         )}
       >
-        {children}
+        <Providers>{children}</Providers>
         <TailwindIndicator />
       </body>
     </html>

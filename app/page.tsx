@@ -1,3 +1,4 @@
+import Count from "@/components/count";
 import Graph from "@/components/graph";
 import Nav from "@/components/nav";
 import { Search } from "@/components/search";
@@ -6,7 +7,7 @@ import getStats, { TIMEFRAMES } from "@/lib/fetchStats";
 export default async function Home() {
   const data = await getStats({
     package: "react",
-    timeframe: TIMEFRAMES["last month"],
+    range: TIMEFRAMES["last month"],
   });
 
   return (
@@ -17,9 +18,7 @@ export default async function Home() {
           Get count of npm <br /> packages quickly
         </h1>
         <Search />
-        <p className="text-center">
-          Total downloads: {data.total.toLocaleString()}
-        </p>
+        <Count count={data.total} />
         <Graph data={data} />
       </main>
     </div>

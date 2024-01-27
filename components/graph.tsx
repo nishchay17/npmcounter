@@ -4,14 +4,16 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip } from "recharts";
 import colors from "tailwindcss/colors";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { useAppContext } from "@/context/app-context";
 
 export default function Graph({ data }: any) {
+  const { state } = useAppContext();
   return (
     <Card>
       <CardContent className="pb-4">
         <div className="h-[350px] md:h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data.data}>
+            <BarChart data={state.data ?? data.data}>
               <Tooltip
                 content={({ active, payload }: any) => {
                   if (active && payload && payload.length) {
