@@ -3,7 +3,7 @@ import Icon from "@/components/icon";
 
 function Nav() {
   return (
-    <nav className="flex justify-between items-center py-4">
+    <nav className="flex justify-between items-center py-7">
       <Icon />
       <a
         href="https://github.com/nishchay17/npmcounter"
