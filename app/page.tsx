@@ -1,4 +1,5 @@
 import Count from "@/components/count";
+import Footer from "@/components/footer";
 import Graph from "@/components/graph";
 import Nav from "@/components/nav";
 import { Search } from "@/components/search";
@@ -21,6 +22,7 @@ export default async function Home() {
         <Count count={data.total} />
         <Graph data={data} />
       </main>
+      <Footer />
     </div>
   );
 }
