@@ -10,10 +10,12 @@ export default function Graph({ data }: any) {
   const { state } = useAppContext();
   return (
     <Card>
-      <CardContent className="pb-4">
+      <CardContent className="py-4">
         <div className="h-[350px] md:h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={state.data ?? data.data}>
+            <BarChart
+              data={state.status === "not-loaded" ? data.data : state.data}
+            >
               <Tooltip
                 content={({ active, payload }: any) => {
                   if (active && payload && payload.length) {

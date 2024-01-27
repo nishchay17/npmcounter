@@ -1,9 +1,10 @@
 import { createContext, Dispatch, useContext, useReducer } from "react";
 
 export type AppContextStateType = {
+  status: "not-loaded" | "loading" | "loaded" | "error"; // not-loaded in flag to use server side fetched data
   range: string;
   package: string;
-  total?: number;
+  total: number;
   data?: { downloads: number; day: string }[];
 };
 type ReplaceAllType = {
@@ -17,13 +18,15 @@ type AppContextType = {
 };
 
 const defaultValue: AppContextStateType = {
+  status: "not-loaded",
   range: "last month",
   package: "react",
+  total: 0,
 };
 
 const AppContext = createContext<AppContextType>({
   state: defaultValue,
-  dispatch: () => void 0,
+  dispatch: () => {},
 });
 
 function reducer(state: AppContextStateType, action: AppActionsType) {

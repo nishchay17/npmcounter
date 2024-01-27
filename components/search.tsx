@@ -36,13 +36,18 @@ export function Search() {
   });
 
   useEffect(() => {
-    if (searchParams.get("package") && searchParams.get("range")) {
-      const some = getStats({
-        package: searchParams.get("package") ?? "",
-        range: isRangeValid(searchParams.get("range")) ?? "last month",
-      });
-      dispatch({ type: "replace-all", payload: some });
-    }
+    (async () => {
+      if (searchParams.get("package") && searchParams.get("range")) {
+        const data = await getStats({
+          package: searchParams.get("package") ?? "",
+          range: isRangeValid(searchParams.get("range")) ?? "last month",
+        });
+        dispatch({
+          type: "replace-all",
+          payload: { ...data, status: "loaded" },
+        });
+      }
+    })();
   }, []);
 
   async function onSubmit(values: z.infer<typeof searchSchema>) {
@@ -50,8 +55,8 @@ export function Search() {
     params.set("range", values.range);
     params.set("package", values.package);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    const some = await getStats(values);
-    dispatch({ type: "replace-all", payload: some });
+    const data = await getStats(values);
+    dispatch({ type: "replace-all", payload: data });
   }
 
   return (
