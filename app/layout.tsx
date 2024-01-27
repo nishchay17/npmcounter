@@ -1,11 +1,18 @@
 import "./globals.css";
 
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+import { Poppins } from "next/font/google";
 
 import { cn } from "@/lib/utils";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
-const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
+const poppins = Poppins({
+  display: "swap",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,11 +28,12 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          "min-h-screen bg-background font-poppins antialiased",
+          poppins.className
         )}
       >
         {children}
+        <TailwindIndicator />
       </body>
     </html>
   );
