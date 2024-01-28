@@ -33,7 +33,7 @@ function Count({ count }: { count: number }) {
         </>
       ) : (
         <>
-          <p className="text-xl">
+          <p className="text-base sm:text-lg md:text-xl">
             Total{" "}
             <span className="underline underline-offset-2">
               {state.package}
@@ -47,7 +47,7 @@ function Count({ count }: { count: number }) {
                   onClick={() => copy(toDisplay.toString())}
                   className="mt-2 cursor-pointer flex items-center justify-center gap-2 text-[var(--hero-red)]"
                 >
-                  <span className="text-4xl  font-medium">
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-medium">
                     {toDisplay.toLocaleString()}
                   </span>
                   <CopyIcon height={24} width={24} />
