@@ -2,6 +2,8 @@
 
 [![Website](https://img.shields.io/website?label=Website&url=https://npmcounter.vercel.app/)](https://npmcounter.vercel.app/) [![GitHub License](https://img.shields.io/github/license/nishchay17/npmcounter)](https://github.com/nishchay17/npmcounter/blob/main/LICENSE)
 
+![image](https://github.com/nishchay17/npmcounter/assets/48904113/2257fd29-2922-4866-9323-f57b95ad43b6)
+
 ## Table of Contents
 
   - [About](#about)
