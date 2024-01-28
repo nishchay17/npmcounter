@@ -12,12 +12,14 @@ export enum States {
   LOADED = "loaded",
   ERROR = "error",
 }
+
+export type RangeDataType = { downloads: number; day: string };
 export type AppContextStateType = {
   status: States; // not-loaded in flag to use server side fetched data
   range: string;
   package: string;
   total: number;
-  data?: { downloads: number; day: string }[];
+  data?: RangeDataType[];
 };
 type ReplaceAllType = {
   type: "replace-all";

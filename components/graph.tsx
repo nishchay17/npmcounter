@@ -7,6 +7,7 @@ import colors from "tailwindcss/colors";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAppContext } from "@/context/app-context";
 import { Skeleton } from "./ui/skeleton";
+import { sinkRangeData } from "@/lib/utils";
 
 export default function Graph({ data }: any) {
   const [isMounted, setIsMounted] = useState(false);
@@ -26,7 +27,9 @@ export default function Graph({ data }: any) {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={state.status === "not-loaded" ? data.data : state.data}
+                data={sinkRangeData(
+                  state.status === "not-loaded" ? data.data : state.data
+                )}
               >
                 <Tooltip
                   content={({ active, payload }: any) => {
