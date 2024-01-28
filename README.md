@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NPM counter
+
+[![Website](https://img.shields.io/website?label=Website&url=https://npmcounter.vercel.app/)](https://npmcounter.vercel.app/) [![GitHub License](https://img.shields.io/github/license/nishchay17/npmcounter)](https://github.com/nishchay17/npmcounter/blob/main/LICENSE)
+
+## Table of Contents
+
+  - [About](#about)
+  - [Features](#features)
+  - [Getting Started](#getting-started)
+  - [License](#license)
+
+## About
+
+Welcome to my npm count website. This platform is created for fetching the npm package count for the given range, and
+share the URL with others.
+
+## Features
+
+1.  **Using URL param**: The website uses query params for storing state, so that while sharing the same data gets displayed to other people.
+2.  **Quick and easy to use**: The website is designed to be easy to use and responsive, ensuring a seamless experience for the user.
+3.  **SSR**: Using SSR to optimize the app for performance
 
 ## Getting Started
 
-First, run the development server:
+To get started with our website, follow these steps:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone the repository
+git clone https://github.com/nishchay17/npmcounter.git
+
+# Change directory
+cd npmcounter
+
+# Install dependencies
+pnpm
+
+# Start the development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## License
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the [MIT License](https://github.com/nishchay17/npmcounter/blob/main/LICENSE).
