@@ -91,7 +91,7 @@ export function Search() {
             Search
           </Button>
         </div>
-        <div className="flex justify-center space-x-2 mt-4">
+        <div className="flex justify-center space-x-2 mt-4 flex-wrap">
           {Object.keys(TIMEFRAMES).map((timerange) => (
             <Button
               variant={
