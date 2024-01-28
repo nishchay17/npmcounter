@@ -37,7 +37,9 @@ export function Search() {
 
   useEffect(() => {
     (async () => {
-      if (searchParams.get("package") && searchParams.get("range")) {
+      const pkg = searchParams.get("package");
+      const range = searchParams.get("range");
+      if (pkg || (pkg && range)) {
         dispatch({ type: "loading" });
         const data = await getStats({
           package: searchParams.get("package") ?? "",
