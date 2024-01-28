@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import Count from "@/components/count";
 import Footer from "@/components/footer";
 import Graph from "@/components/graph";
@@ -18,7 +20,9 @@ export default async function Home() {
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-center">
           Get count of npm <br /> packages quickly
         </h1>
-        <Search />
+        <Suspense>
+          <Search />
+        </Suspense>
         <Count count={data.total} />
         <Graph data={data} />
       </main>

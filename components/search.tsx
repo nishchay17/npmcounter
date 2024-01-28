@@ -51,7 +51,7 @@ export function Search() {
         });
       }
     })();
-  }, []);
+  }, [dispatch, searchParams]);
 
   async function onSubmit(values: z.infer<typeof searchSchema>) {
     dispatch({ type: "loading" });
