@@ -18,6 +18,10 @@ export function sinkRangeData(data: RangeDataType[], shrinkFactor?: number) {
     shrinkFactor = calShrinkFactor(data.length);
   }
 
+  if (shrinkFactor === 1) {
+    return data;
+  }
+
   let tempData: { downloads: number; day: string[] } = {
     downloads: 0,
     day: [],
