@@ -18,7 +18,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { useAppContext } from "@/context/app-context";
+import { States, useAppContext } from "@/context/app-context";
 
 export function Search() {
   const searchParams = useSearchParams();
@@ -38,25 +38,30 @@ export function Search() {
   useEffect(() => {
     (async () => {
       if (searchParams.get("package") && searchParams.get("range")) {
+        dispatch({ type: "loading" });
         const data = await getStats({
           package: searchParams.get("package") ?? "",
           range: isRangeValid(searchParams.get("range")) ?? "last month",
         });
         dispatch({
           type: "replace-all",
-          payload: { ...data, status: "loaded" },
+          payload: { ...data, status: States.LOADED },
         });
       }
     })();
   }, []);
 
   async function onSubmit(values: z.infer<typeof searchSchema>) {
+    dispatch({ type: "loading" });
     const params = new URLSearchParams(searchParams);
     params.set("range", values.range);
     params.set("package", values.package);
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
     const data = await getStats(values);
-    dispatch({ type: "replace-all", payload: { ...data, status: "loaded" } });
+    dispatch({
+      type: "replace-all",
+      payload: { ...data, status: States.LOADED },
+    });
   }
 
   return (
@@ -80,7 +85,9 @@ export function Search() {
               </FormItem>
             )}
           />
-          <Button type="submit">Search</Button>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            Search
+          </Button>
         </div>
         <div className="flex justify-center space-x-2 mt-4">
           {Object.keys(TIMEFRAMES).map((timerange) => (

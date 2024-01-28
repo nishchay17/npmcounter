@@ -25,7 +25,7 @@ type getStatsType = {
 };
 export default async function getStats(params: getStatsType) {
   if (!params.package) {
-    throw new Error("No pkg name specified");
+    throw new Error("No package name specified");
   }
   if (!params.range) {
     throw new Error("No range specified");
@@ -34,7 +34,8 @@ export default async function getStats(params: getStatsType) {
     TIMEFRAMES[params.range as keyof typeof TIMEFRAMES] || params.range;
   try {
     let newData = await fetch(
-      `https://api.npmjs.org/downloads/range/${range}/${params.package}`
+      `https://api.npmjs.org/downloads/range/${range}/${params.package}`,
+      { next: { revalidate: 24 * 60 * 60 } }
     )
       .then((res) => res.json())
       .then((json) => {

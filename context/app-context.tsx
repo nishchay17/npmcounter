@@ -1,7 +1,19 @@
-import { createContext, Dispatch, useContext, useReducer } from "react";
+import {
+  createContext,
+  Dispatch,
+  Reducer,
+  useContext,
+  useReducer,
+} from "react";
 
+export enum States {
+  NOT_LOADED = "not-loaded",
+  LOADING = "loading",
+  LOADED = "loaded",
+  ERROR = "error",
+}
 export type AppContextStateType = {
-  status: "not-loaded" | "loading" | "loaded" | "error"; // not-loaded in flag to use server side fetched data
+  status: States; // not-loaded in flag to use server side fetched data
   range: string;
   package: string;
   total: number;
@@ -11,14 +23,18 @@ type ReplaceAllType = {
   type: "replace-all";
   payload: Partial<AppContextStateType>;
 };
-type AppActionsType = ReplaceAllType;
+type LoadingType = {
+  type: "loading";
+  payload?: Partial<AppContextStateType>;
+};
+type AppActionsType = ReplaceAllType | LoadingType;
 type AppContextType = {
   state: AppContextStateType;
   dispatch: Dispatch<any>;
 };
 
 const defaultValue: AppContextStateType = {
-  status: "not-loaded",
+  status: States.NOT_LOADED,
   range: "last month",
   package: "react",
   total: 0,
@@ -30,17 +46,26 @@ const AppContext = createContext<AppContextType>({
 });
 
 function reducer(state: AppContextStateType, action: AppActionsType) {
-  if (action.type === "replace-all") {
-    return {
-      ...state,
-      ...action.payload,
-    };
+  switch (action.type) {
+    case "replace-all":
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case "loading":
+      return {
+        ...state,
+        status: States.LOADING,
+      };
+    default:
+      throw Error("Unknown action.");
   }
-  throw Error("Unknown action.");
 }
 
 function AppContextProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, defaultValue);
+  const [state, dispatch] = useReducer<
+    Reducer<AppContextStateType, AppActionsType>
+  >(reducer, defaultValue);
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}
