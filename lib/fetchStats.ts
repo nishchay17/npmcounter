@@ -1,3 +1,5 @@
+import fetchCreatedAt from "./fetchCreatedAt";
+
 function pad(num: number) {
   return `${num < 10 ? "0" : ""}${num}`;
 }
@@ -30,8 +32,15 @@ export default async function getStats(params: getStatsType) {
   if (!params.range) {
     throw new Error("No range specified");
   }
-  const range =
+  let range =
     TIMEFRAMES[params.range as keyof typeof TIMEFRAMES] || params.range;
+
+  if (range === "all time") {
+    const createdAt = new Date(await fetchCreatedAt(params.package));
+    range = `${createdAt.getUTCFullYear()}-${pad(
+      createdAt.getUTCMonth() + 1
+    )}-${pad(createdAt.getUTCDate())}:${getDateRange()}`;
+  }
 
   let newData = await fetch(
     `https://api.npmjs.org/downloads/range/${range}/${params.package}`,
