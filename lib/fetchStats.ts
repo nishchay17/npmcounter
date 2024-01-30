@@ -1,5 +1,3 @@
-import fetchCreatedAt from "./fetchCreatedAt";
-
 function pad(num: number) {
   return `${num < 10 ? "0" : ""}${num}`;
 }
@@ -36,10 +34,7 @@ export default async function getStats(params: getStatsType) {
     TIMEFRAMES[params.range as keyof typeof TIMEFRAMES] || params.range;
 
   if (range === "all time") {
-    const createdAt = new Date(await fetchCreatedAt(params.package));
-    range = `${createdAt.getUTCFullYear()}-${pad(
-      createdAt.getUTCMonth() + 1
-    )}-${pad(createdAt.getUTCDate())}:${getDateRange()}`;
+    range = `2012-01-01:${getDateRange()}`;
   }
 
   let newData = await fetch(
