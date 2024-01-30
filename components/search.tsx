@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,7 +24,6 @@ export function Search() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const [_, setFlag] = useState(false);
   const { dispatch } = useAppContext();
 
   const form = useForm<z.infer<typeof searchSchema>>({
@@ -98,11 +97,9 @@ export function Search() {
                 form.getValues("range") !== timerange ? "ghost" : "outline"
               }
               size="sm"
-              type="button"
+              type="submit"
               key={timerange}
               onClick={() => {
-                // this will not render, so adding additional state
-                setFlag((f) => !f);
                 form.setValue("range", timerange);
               }}
             >
