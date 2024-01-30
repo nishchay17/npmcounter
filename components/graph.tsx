@@ -7,7 +7,7 @@ import colors from "tailwindcss/colors";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAppContext } from "@/context/app-context";
 import { Skeleton } from "./ui/skeleton";
-import { sinkRangeData } from "@/lib/utils";
+import { shrinkRangeData } from "@/lib/utils";
 
 export default function Graph({ data }: any) {
   const [isMounted, setIsMounted] = useState(false);
@@ -18,19 +18,21 @@ export default function Graph({ data }: any) {
     return () => setIsMounted(false);
   }, []);
 
+  const shrinkedData = shrinkRangeData(
+    state.status === "not-loaded" ? data.data : state.data
+  );
+
   return (
     <Card>
       <CardContent className="py-4">
-        <div className="h-[350px] md:h-[250px]">
+        <div className="flex items-center justify-center h-[350px] md:h-[250px]">
           {!isMounted ? (
             <Skeleton className="h-full w-full" />
+          ) : shrinkedData.length === 0 ? (
+            <p className="text-lg">No data</p>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={sinkRangeData(
-                  state.status === "not-loaded" ? data.data : state.data
-                )}
-              >
+              <BarChart data={shrinkedData}>
                 <Tooltip
                   content={({ active, payload }: any) => {
                     if (active && payload && payload.length) {

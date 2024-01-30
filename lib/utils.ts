@@ -10,7 +10,7 @@ function calShrinkFactor(len: number) {
   return Math.ceil(len / 100);
 }
 
-export function sinkRangeData(data: RangeDataType[], shrinkFactor?: number) {
+export function shrinkRangeData(data: RangeDataType[], shrinkFactor?: number) {
   if (!data) {
     return [];
   }
