@@ -31,6 +31,10 @@ function Count({ count }: { count: number }) {
           <Skeleton className="h-6 w-48 mx-auto mt-2" />
           <Skeleton className="h-8 w-20 mx-auto mt-2" />
         </>
+      ) : state.status === "error" ? (
+        <p className="text-base sm:text-lg md:text-xl text-hero-red">
+          {state.message}
+        </p>
       ) : (
         <>
           <p className="text-base sm:text-lg md:text-xl">

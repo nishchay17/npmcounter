@@ -9,7 +9,6 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import getStats, { TIMEFRAMES } from "@/lib/fetchStats";
-import isRangeValid from "@/lib/validateRange";
 import { searchSchema } from "@/lib/schema/searchSchema";
 import {
   Form,
@@ -30,7 +29,7 @@ export function Search() {
     resolver: zodResolver(searchSchema),
     defaultValues: {
       package: searchParams.get("package") ?? "",
-      range: isRangeValid(searchParams.get("range")) ?? "last month",
+      range: searchParams.get("range") ?? "last month",
     },
   });
 
@@ -40,29 +39,43 @@ export function Search() {
       const range = searchParams.get("range");
       if (pkg || (pkg && range)) {
         dispatch({ type: "loading" });
-        const data = await getStats({
-          package: searchParams.get("package") ?? "",
-          range: isRangeValid(searchParams.get("range")) ?? "last month",
-        });
-        dispatch({
-          type: "replace-all",
-          payload: { ...data, status: States.LOADED },
-        });
+        try {
+          const data = await getStats({
+            package: searchParams.get("package") ?? "",
+            range: searchParams.get("range") ?? "last month",
+          });
+          dispatch({
+            type: "replace-all",
+            payload: { ...data, status: States.LOADED },
+          });
+        } catch (error) {
+          dispatch({
+            type: "error",
+            payload: { message: (error as Error).message },
+          });
+        }
       }
     })();
   }, [dispatch, searchParams]);
 
   async function onSubmit(values: z.infer<typeof searchSchema>) {
     dispatch({ type: "loading" });
-    const params = new URLSearchParams(searchParams);
-    params.set("range", values.range);
-    params.set("package", values.package);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    const data = await getStats(values);
-    dispatch({
-      type: "replace-all",
-      payload: { ...data, status: States.LOADED },
-    });
+    try {
+      const data = await getStats(values);
+      const params = new URLSearchParams(searchParams);
+      params.set("range", values.range);
+      params.set("package", values.package);
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      dispatch({
+        type: "replace-all",
+        payload: { ...data, status: States.LOADED },
+      });
+    } catch (error) {
+      dispatch({
+        type: "error",
+        payload: { message: (error as Error).message },
+      });
+    }
   }
 
   return (
@@ -91,7 +104,7 @@ export function Search() {
           </Button>
         </div>
         <div className="flex justify-center space-x-2 mt-4 flex-wrap">
-          {Object.keys(TIMEFRAMES).map((timerange) => (
+          {[...Object.keys(TIMEFRAMES), "all time"].map((timerange) => (
             <Button
               variant={
                 form.getValues("range") !== timerange ? "ghost" : "outline"

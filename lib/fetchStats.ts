@@ -32,33 +32,34 @@ export default async function getStats(params: getStatsType) {
   }
   const range =
     TIMEFRAMES[params.range as keyof typeof TIMEFRAMES] || params.range;
-  try {
-    let newData = await fetch(
-      `https://api.npmjs.org/downloads/range/${range}/${params.package}`,
-      { next: { revalidate: 24 * 60 * 60 } }
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        return {
-          data: json.downloads.filter(
-            (it: { downloads: number }) => it.downloads > 0
-          ),
-          total: json.downloads.reduce(
-            (acc: number, curr: { downloads: number; day: string }) =>
-              acc + curr.downloads,
-            0
-          ),
-          range,
-          package: params.package,
-        };
-      });
-    return newData;
-  } catch (e) {
-    return {
-      data: [],
-      total: 0,
-      range: range,
-      package: params.package,
-    };
-  }
+
+  let newData = await fetch(
+    `https://api.npmjs.org/downloads/range/${range}/${params.package}`,
+    { next: { revalidate: 24 * 60 * 60 } }
+  )
+    .then((res) => {
+      if (!res.ok) {
+        if (res.status === 404) {
+          throw new Error("Package not found");
+        }
+        throw new Error("Something went wrong");
+      }
+      return res;
+    })
+    .then((res) => res.json())
+    .then((json) => {
+      return {
+        data: json.downloads.filter(
+          (it: { downloads: number }) => it.downloads > 0
+        ),
+        total: json.downloads.reduce(
+          (acc: number, curr: { downloads: number; day: string }) =>
+            acc + curr.downloads,
+          0
+        ),
+        range,
+        package: params.package,
+      };
+    });
+  return newData;
 }

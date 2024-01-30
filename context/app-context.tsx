@@ -20,6 +20,7 @@ export type AppContextStateType = {
   package: string;
   total: number;
   data?: RangeDataType[];
+  message?: string;
 };
 type ReplaceAllType = {
   type: "replace-all";
@@ -29,7 +30,11 @@ type LoadingType = {
   type: "loading";
   payload?: Partial<AppContextStateType>;
 };
-type AppActionsType = ReplaceAllType | LoadingType;
+type ErrorType = {
+  type: "error";
+  payload?: { message: string };
+};
+type AppActionsType = ReplaceAllType | LoadingType | ErrorType;
 type AppContextType = {
   state: AppContextStateType;
   dispatch: Dispatch<any>;
@@ -53,11 +58,22 @@ function reducer(state: AppContextStateType, action: AppActionsType) {
       return {
         ...state,
         ...action.payload,
+        message: "",
       };
     case "loading":
       return {
         ...state,
         status: States.LOADING,
+        message: "",
+      };
+    case "error":
+      return {
+        ...state,
+        data: [],
+        total: 0,
+        package: "",
+        status: States.ERROR,
+        message: action.payload?.message,
       };
     default:
       throw Error("Unknown action.");
