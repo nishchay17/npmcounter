@@ -57,7 +57,7 @@ function Count({ count }: { count: number }) {
                   <CopyIcon height={24} width={24} />
                 </div>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent side="bottom">
                 <p>Copy it!</p>
               </TooltipContent>
             </Tooltip>
