@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 function calShrinkFactor(len: number) {
+  if (len === 0) return 1;
   return Math.ceil(len / 100);
 }
 

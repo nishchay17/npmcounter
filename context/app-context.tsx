@@ -37,7 +37,7 @@ type ErrorType = {
 type AppActionsType = ReplaceAllType | LoadingType | ErrorType;
 type AppContextType = {
   state: AppContextStateType;
-  dispatch: Dispatch<any>;
+  dispatch: Dispatch<AppActionsType>;
 };
 
 const defaultValue: AppContextStateType = {

@@ -8,6 +8,7 @@ export const searchSchema = z
     range: z.string().min(2).max(50),
   })
   .transform((data) => {
-    data.package = data.package?.toLowerCase();
+    // Sanitize package name: lowercase and trim whitespace
+    data.package = data.package?.toLowerCase().trim() || "";
     return data;
   });

@@ -1,25 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip } from "recharts";
 import colors from "tailwindcss/colors";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { useAppContext } from "@/context/app-context";
+import { useAppContext, RangeDataType } from "@/context/app-context";
 import { Skeleton } from "./ui/skeleton";
 import { shrinkRangeData } from "@/lib/utils";
 
-export default function Graph({ data }: any) {
+type GraphProps = {
+  data: {
+    data: RangeDataType[];
+    total: number;
+    range: string;
+    package: string;
+  };
+};
+
+export default function Graph({ data }: GraphProps) {
   const [isMounted, setIsMounted] = useState(false);
   const { state } = useAppContext();
 
   useEffect(() => {
     setIsMounted(true);
-    return () => setIsMounted(false);
   }, []);
 
-  const shrinkedData = shrinkRangeData(
-    state.status === "not-loaded" ? data.data : state.data
+  const shrunkenData = useMemo(
+    () =>
+      shrinkRangeData(
+        state.status === "not-loaded" ? data.data : state.data ?? []
+      ),
+    [state.status, state.data, data.data]
   );
 
   return (
@@ -28,13 +40,13 @@ export default function Graph({ data }: any) {
         <div className="flex items-center justify-center h-[350px] md:h-[250px]">
           {!isMounted ? (
             <Skeleton className="h-full w-full" />
-          ) : shrinkedData.length === 0 ? (
+          ) : shrunkenData.length === 0 ? (
             <p className="text-lg">No data</p>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={shrinkedData}>
+              <BarChart data={shrunkenData}>
                 <Tooltip
-                  content={({ active, payload }: any) => {
+                  content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       return (
                         <div className="rounded-lg border bg-background p-2 shadow-sm">

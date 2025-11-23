@@ -8,6 +8,7 @@ function Nav() {
       <a
         href="https://github.com/nishchay17/npmcounter"
         target="_blank"
+        rel="noopener noreferrer"
         className="flex items-center gap-2 font-medium"
       >
         View source <GitHubLogoIcon height={24} width={24} />

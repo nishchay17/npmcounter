@@ -1,9 +1,14 @@
 "use client";
 
 import AppContextProvider from "@/context/app-context";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 function Providers({ children }: { children: React.ReactNode }) {
-  return <AppContextProvider>{children}</AppContextProvider>;
+  return (
+    <TooltipProvider>
+      <AppContextProvider>{children}</AppContextProvider>
+    </TooltipProvider>
+  );
 }
 
 export default Providers;

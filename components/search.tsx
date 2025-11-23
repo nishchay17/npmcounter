@@ -15,6 +15,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { States, useAppContext } from "@/context/app-context";
@@ -34,29 +35,41 @@ export function Search() {
   });
 
   useEffect(() => {
+    const controller = new AbortController();
+
     (async () => {
       const pkg = searchParams.get("package");
       const range = searchParams.get("range");
-      if (pkg || (pkg && range)) {
+      if (pkg) {
         dispatch({ type: "loading" });
         try {
-          const data = await getStats({
-            package: searchParams.get("package") ?? "",
-            range: searchParams.get("range") ?? "last month",
-          });
-          dispatch({
-            type: "replace-all",
-            payload: { ...data, status: States.LOADED },
-          });
+          const data = await getStats(
+            {
+              package: pkg,
+              range: range ?? "last month",
+            },
+            controller.signal
+          );
+
+          if (!controller.signal.aborted) {
+            dispatch({
+              type: "replace-all",
+              payload: { ...data, status: States.LOADED },
+            });
+          }
         } catch (error) {
-          dispatch({
-            type: "error",
-            payload: { message: (error as Error).message },
-          });
+          if (!controller.signal.aborted) {
+            dispatch({
+              type: "error",
+              payload: { message: (error as Error).message },
+            });
+          }
         }
       }
     })();
-  }, [dispatch, searchParams]);
+
+    return () => controller.abort();
+  }, [dispatch]);
 
   async function onSubmit(values: z.infer<typeof searchSchema>) {
     dispatch({ type: "loading" });
@@ -87,6 +100,7 @@ export function Search() {
             name="package"
             render={({ field }) => (
               <FormItem className="w-full">
+                <FormLabel className="sr-only">Package Name</FormLabel>
                 <FormControl>
                   <Input
                     type="text"

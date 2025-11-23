@@ -8,7 +8,6 @@ import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,12 +15,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 function Count({ count }: { count: number }) {
   const [isMounted, setIsMounted] = useState(false);
   const { state } = useAppContext();
-  const [_, copy] = useCopyToClipboard();
+  const [, copy] = useCopyToClipboard();
   const toDisplay = state.status === "not-loaded" ? count : state.total;
 
   useEffect(() => {
     setIsMounted(true);
-    return () => setIsMounted(false);
   }, []);
 
   return (
@@ -44,24 +42,23 @@ function Count({ count }: { count: number }) {
             </span>{" "}
             downloads
           </p>
-          <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger>
-                <div
-                  onClick={() => copy(toDisplay.toString())}
-                  className="mt-2 cursor-pointer flex items-center justify-center gap-2 text-[var(--hero-red)]"
-                >
-                  <span className="text-2xl sm:text-3xl md:text-4xl font-medium">
-                    {toDisplay.toLocaleString()}
-                  </span>
-                  <CopyIcon height={24} width={24} />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Copy it!</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => copy(toDisplay.toString())}
+                className="mt-2 mx-auto cursor-pointer flex items-center justify-center gap-2 text-[var(--hero-red)] bg-transparent border-none hover:opacity-80 transition-opacity"
+                aria-label="Copy download count to clipboard"
+              >
+                <span className="text-2xl sm:text-3xl md:text-4xl font-medium">
+                  {toDisplay.toLocaleString()}
+                </span>
+                <CopyIcon height={24} width={24} />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>Copy it!</p>
+            </TooltipContent>
+          </Tooltip>
         </>
       )}
     </div>
