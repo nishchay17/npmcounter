@@ -99,7 +99,7 @@ export function Search() {
             control={form.control}
             name="package"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="w-full space-y-0">
                 <FormLabel className="sr-only">Package Name</FormLabel>
                 <FormControl>
                   <Input
